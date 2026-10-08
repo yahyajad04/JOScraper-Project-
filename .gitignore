@@ -1,0 +1,28 @@
+# =========================
+# ASP.NET Core / .NET
+# =========================
+
+# Build output
+**/bin/
+**/obj/
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+**/packages/
+
+# Configuration / secrets
+appsettings.json
+
+# ASP.NET generated files
+wwwroot/lib/
