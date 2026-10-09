@@ -143,6 +143,9 @@ namespace JoSale.Migrations
                     b.Property<string>("NormalizedName")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Vector")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");

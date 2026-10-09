@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JoSale.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261008090558_AddIndexing")]
-    partial class AddIndexing
+    [Migration("20261008184508_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,5 +1,6 @@
 ﻿using JoSale.Data;
 using JoSale.Helpers;
+using JoSale.Interfaces.IServices;
 using JoSale.Interfaces.Repositories;
 using JoSale.Models;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +10,11 @@ namespace JoSale.Repositories
     public class StoreItemRepository : IStoreItem
     {
         private readonly AppDbContext _context;
-        public StoreItemRepository(AppDbContext context)
+        private readonly ISemanticSearch _semantic;
+        public StoreItemRepository(AppDbContext context, ISemanticSearch semantic)
         {
             _context = context;
+            _semantic = semantic;
         }
         public async Task CreateStoreItem(StoreItem item)
         {
@@ -22,7 +25,6 @@ namespace JoSale.Repositories
         public async Task CreateStoreItems(List<StoreItem> storeItems)
         {
             var extract = storeItems.DistinctBy(c => new { c.Item.Name, c.StoreId }).ToList(); 
-
             _context.StoreItem.AddRange(extract);
             await _context.SaveChangesAsync();
         }

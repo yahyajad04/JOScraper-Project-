@@ -186,7 +186,8 @@ namespace JoSale.Services
 
                         if(urls.Contains(scraped.ProductURL))
                         {
-                            var check = currentStoreItems.FirstOrDefault(s => s.ProductUrl!.Equals(scraped.ProductURL));
+                            var check = currentStoreItems.FirstOrDefault(s => s.ProductUrl!.Equals(scraped.ProductURL)
+                            || s.Item.NormalizedName == scraped.Item.NormalizedName);
 
                             if (check.StoreId != store.Id)
                             {
@@ -198,10 +199,13 @@ namespace JoSale.Services
                         else
                         {
                             var category = await _categorization.Categorize(newItem);
-                            scraped.Item.Category = category;
-                            scraped.Item.CategoryId = category.Id;
-                            newItem.CategoryId = category.Id;
-                            newItem.CategoryId = category.Id;
+                            scraped.Item.Category = category.Category;
+                            scraped.Item.CategoryId = category.Category.Id;
+                            scraped.Item.Vector = category.Vector;
+
+                            newItem.Vector = category.Vector;
+                            newItem.CategoryId = category.Category.Id;
+                            newItem.CategoryId = category.Category.Id;
 
                             finalScrapedItems.Add(scraped);
                         }

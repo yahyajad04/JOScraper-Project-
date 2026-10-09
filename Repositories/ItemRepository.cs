@@ -27,10 +27,10 @@ namespace JoSale.Repositories
 
         public async Task<List<Item>> CreateItems(List<Item> items)
         {
-            var existNames = await _context.Items.Select(e => e.Name).ToListAsync();
+            var existNames = await _context.Items.Select(e => e.NormalizedName).ToListAsync();
 
-            var newItems = items.DistinctBy(it => it.Name)
-                    .Where(it => !existNames.Contains(it.Name))
+            var newItems = items.DistinctBy(it => it.NormalizedName)
+                    .Where(it => !existNames.Contains(it.NormalizedName))
                     .ToList();
 
             _context.Items.AddRange(newItems);

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JoSale.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260919101716_Initial")]
-    partial class Initial
+    [Migration("20261008204042_AddedVectorstoitems")]
+    partial class AddedVectorstoitems
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,6 +117,9 @@ namespace JoSale.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Vector")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -140,9 +143,19 @@ namespace JoSale.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Vector")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("Items");
                 });
@@ -182,6 +195,9 @@ namespace JoSale.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
@@ -195,6 +211,8 @@ namespace JoSale.Migrations
                     b.HasKey("StoreId", "ItemId");
 
                     b.HasIndex("ItemId");
+
+                    b.HasIndex("StoreId");
 
                     b.ToTable("StoreItem");
                 });

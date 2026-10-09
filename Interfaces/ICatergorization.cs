@@ -1,9 +1,10 @@
-﻿using JoSale.Models;
+﻿using JoSale.DTO_s.CategoriesDTO_s;
+using JoSale.Models;
 
 namespace JoSale.Interfaces
 {
     public interface ICatergorization
     {
-        Task<Category> Categorize(Item Item);
+        Task<CategorizeDTO> Categorize(Item Item);
     }
 }

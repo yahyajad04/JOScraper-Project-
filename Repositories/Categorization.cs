@@ -22,7 +22,7 @@ namespace JoSale.Repositories
             _semanticSearch = semanticSearch;
             _geminiService = geminiService;
         }
-        public async Task<Category> Categorize(Item Item)
+        public async Task<CategorizeDTO> Categorize(Item Item)
         {
             var categories = await _categoryRepository.GetAll();
             var vector = new float[1];
@@ -33,7 +33,13 @@ namespace JoSale.Repositories
             }
             catch (Exception ex)
             {
-                return categories[0];
+                var cat = new CategorizeDTO
+                {
+                    Category = categories[0],
+                    Vector = new float[1],
+                };
+
+                return cat;
             }
             float maxSimilarity = -1;
             var finalCategory = new Category();
@@ -44,7 +50,9 @@ namespace JoSale.Repositories
             {
                 foreach(var category in categories)
                 {
-                    categoryNames += category.Name + ",";
+                    if(category.Id != categories[0].Id)
+                        categoryNames += category.Name + ",";
+
                     if (category.Vector != null)
                     {
                         var sim = _semanticSearch.Similarity(category.Vector, vector);
@@ -68,7 +76,13 @@ namespace JoSale.Repositories
                         }
                         catch(Exception ex)
                         {
-                            return finalCategory;
+                            var cat = new CategorizeDTO
+                            {
+                                Category = finalCategory,
+                                Vector = vector
+                            };
+
+                            return cat;
                         }
                         var sim = _semanticSearch.Similarity(vect2, vector);  
                         if (maxSimilarity < sim)
@@ -105,7 +119,12 @@ namespace JoSale.Repositories
 
                     if (exist != null)
                     {
-                        return exist;
+                        var cat = new CategorizeDTO
+                        {
+                            Category = exist,
+                            Vector = vector
+                        };
+                        return cat;
                     }
                     else
                     {
@@ -114,18 +133,34 @@ namespace JoSale.Repositories
                         finalCategory.Vector = categoryVector;
 
                         finalCategory = await _categoryRepository.CreateCategory(finalCategory);
-                        return finalCategory;
+
+                        var cat = new CategorizeDTO
+                        {
+                            Category = finalCategory,
+                            Vector = vector
+                        };
+                        return cat;
                     }
                 }
                 catch(Exception ex)
                 {
                     Console.WriteLine(ex);
-                    return finalCategory;
+                    var cat = new CategorizeDTO
+                    {
+                        Category = finalCategory,
+                        Vector = vector
+                    };
+                    return cat;
                 }
             }
             else
             {
-                return finalCategory;
+                var cat = new CategorizeDTO
+                {
+                    Category = finalCategory,
+                    Vector = vector
+                };
+                return cat;
             }
         }
     }

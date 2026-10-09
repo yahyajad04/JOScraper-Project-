@@ -5,14 +5,14 @@
 namespace JoSale.Migrations
 {
     /// <inheritdoc />
-    public partial class ImageURLAdded : Migration
+    public partial class AddedVectorstoitems : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "ImageURL",
-                table: "StoreItem",
+                name: "Vector",
+                table: "Items",
                 type: "nvarchar(max)",
                 nullable: true);
         }
@@ -21,8 +21,8 @@ namespace JoSale.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ImageURL",
-                table: "StoreItem");
+                name: "Vector",
+                table: "Items");
         }
     }
 }
