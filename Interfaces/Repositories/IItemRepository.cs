@@ -6,6 +6,6 @@ namespace JoSale.Interfaces.Repositories
     {
         Task<List<Item>> GetAll();
         Task CreateItem(Item item);
-        Task<List<Item>> CreateItems(List<Item> items);
+        Task<Dictionary<Item,Item>> CreateItems(List<Item> items);
     }
 }

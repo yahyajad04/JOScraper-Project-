@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JoSale.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261008184508_Initial")]
+    [Migration("20261018125225_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -145,6 +145,9 @@ namespace JoSale.Migrations
 
                     b.Property<string>("NormalizedName")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Vector")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

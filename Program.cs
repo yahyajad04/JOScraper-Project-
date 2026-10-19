@@ -1,12 +1,6 @@
 using Hangfire;
-using JoSale.Data;
 using JoSale.Extensions;
 using JoSale.Interfaces;
-using JoSale.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,21 +42,21 @@ app.UseSerilogRequestLogging();
 
 //"0 0 */2 * *" => This expression is a Cron Expression and it is for time
 //This expression means every 2 days on 00:00 AM it will run the Scraper
-//RecurringJob.AddOrUpdate<IScrapingJob>(
-//    "city-center-scraping",
-//    job => job.RunCityCenter(),
-//    "0 0 */2 * *" );
+RecurringJob.AddOrUpdate<IScrapingJob>(
+    "city-center-scraping",
+    job => job.RunCityCenter(),
+    "0 0 */2 * *" );
 
-////Here the time expression is shifted 30 minutes from the before scraper, and same for the next ones
-//RecurringJob.AddOrUpdate<IScrapingJob>(
-//    "midas-scraping",
-//    job => job.RunMidas(),
-//    "30 0 */2 * *" );
+//Here the time expression is shifted 30 minutes from the before scraper, and same for the next ones
+RecurringJob.AddOrUpdate<IScrapingJob>(
+    "midas-scraping",
+    job => job.RunMidas(),
+    "30 0 */2 * *");
 
-//RecurringJob.AddOrUpdate<IScrapingJob>(
-//    "oriental-scraping",
-//    job => job.RunOriental(),
-//    "0 1 */2 * *" );
+RecurringJob.AddOrUpdate<IScrapingJob>(
+    "oriental-scraping",
+    job => job.RunOriental(),
+    "0 1 */2 * *");
 
 app.UseHttpsRedirection();
 

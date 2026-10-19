@@ -179,6 +179,12 @@ namespace JoSale.Services
             }
 
             var newItems = await _itemRepository.CreateItems(finalItems);
+            foreach (var scraped in finalScrapedItems)
+            {
+                scraped.Item = newItems.GetValueOrDefault(scraped.Item)
+                               ?? scraped.Item;
+            }
+
             return finalScrapedItems;
         }
 
