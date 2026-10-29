@@ -2,6 +2,7 @@
 using JoSale.Interfaces;
 using JoSale.Interfaces.IServices;
 using JoSale.Interfaces.Repositories;
+using JoSale.Mappers;
 using JoSale.Models;
 using JoSale.Services;
 using Microsoft.AspNetCore.Http;
@@ -44,21 +45,24 @@ namespace JoSale.Controllers
                 var storeItems = await _cache.GetAsync<List<StoreItem>>(key);
 
                 //If it is a cache hit it will return
-                if(storeItems != null) {
+                if (storeItems != null) {
                     elapsed.Stop();
                     _logger.LogInformation("Get All From Store with Id : {Id} Successful, Elapsed Time: {Time}ms"
                         , StoreId, elapsed.Elapsed.TotalMilliseconds);
-                    return Ok(storeItems);
+                    var storeItemsDTO = storeItems.Select(s => s.toStoreItemDTO());
+                    return Ok(storeItemsDTO);
                 }
 
                 //If it is a Cache miss will come here
-                var databaseStoreItems = await _storeItemRepository.GetAllFromStore(StoreId);
+                var databaseStoreItems = await _storeItemRepository.GetAllFromStore(StoreId, query);
                 await _cache.SetAsync(key, databaseStoreItems, TimeSpan.FromHours(12));
 
                 elapsed.Stop();
                 _logger.LogInformation("Get All From Store with Id : {Id} Successful, Elapsed Time: {Time}ms"
                     ,StoreId, elapsed.Elapsed.TotalMilliseconds);
-                return Ok(databaseStoreItems);
+
+                var databaseStoreItemsDTO = databaseStoreItems.Select(d =>  d.toStoreItemDTO());
+                return Ok(databaseStoreItemsDTO);
             }
             catch(Exception ex)
             {

@@ -78,6 +78,10 @@ namespace JoSale.Repositories
             _context.Items.AddRange(newItems);
             await _context.SaveChangesAsync();
 
+            foreach (var item in newItems)
+            {
+                dict[item] = item;
+            }
             return dict;
         }
     }

@@ -11,7 +11,7 @@ namespace JoSale.Mappers
             {
                 Name = item.Name,
                 Description = item.Description,
-                Category = item.Category,
+                Category = item.Category?.ToCategoryDTO(),
                 CategoryId = item.CategoryId
             };
         }

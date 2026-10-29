@@ -1,4 +1,4 @@
-﻿using JoSale.Models;
+﻿using JoSale.DTO_s.CategoriesDTO_s;
 using System.ComponentModel.DataAnnotations;
 
 namespace JoSale.DTO_s.ItemsDTO_s
@@ -8,7 +8,7 @@ namespace JoSale.DTO_s.ItemsDTO_s
         [Required]
         public string Name { get; set; }
         public int CategoryId { get; set; }
-        public Category? Category { get; set; }
+        public CategoryDTO? Category { get; set; }
         public string? Description { get; set; }
     }
 }

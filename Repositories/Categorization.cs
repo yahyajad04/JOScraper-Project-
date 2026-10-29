@@ -27,6 +27,8 @@ namespace JoSale.Repositories
             var categories = await _categoryRepository.GetAll();
             var vector = new float[1];
             var categoryNames = "Categories: ";
+            float maxSimilarity = -1;
+            var finalCategory = categories[0];
             try
             {
                 vector = await _embedding.GetEmbeddingVector(Item.Name);
@@ -35,14 +37,13 @@ namespace JoSale.Repositories
             {
                 var cat = new CategorizeDTO
                 {
-                    Category = categories[0],
+                    Category = finalCategory,
                     Vector = new float[1],
                 };
 
                 return cat;
             }
-            float maxSimilarity = -1;
-            var finalCategory = new Category();
+
 
             Console.WriteLine($"Item Name: {Item.Name}");
 
@@ -79,7 +80,7 @@ namespace JoSale.Repositories
                             var cat = new CategorizeDTO
                             {
                                 Category = finalCategory,
-                                Vector = vector
+                                Vector = new float[1]
                             };
 
                             return cat;
@@ -103,7 +104,7 @@ namespace JoSale.Repositories
 
             Console.WriteLine("++MAX SIMILARITY: " + maxSimilarity);
                 
-            if(maxSimilarity < 0.6)
+            if(maxSimilarity < 0.5)
             {  
                 try
                 {

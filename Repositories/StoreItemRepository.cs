@@ -24,7 +24,23 @@ namespace JoSale.Repositories
 
         public async Task CreateStoreItems(List<StoreItem> storeItems)
         {
-            var extract = storeItems.DistinctBy(c => new { c.Item.Name, c.StoreId }).ToList(); 
+            //This is to get the current key pairs we have in the database
+            var existKeys = (await _context.StoreItem
+                .Select(s => new { s.ItemId, s.StoreId })
+                .ToListAsync())
+                .Select(s => (s.ItemId, s.StoreId))
+                .ToHashSet();
+
+            //This is to prevent duplicates from the current scrape and from the database too
+            var extract = storeItems
+                .Where(s => s.ItemId != 0)
+                .DistinctBy(s => (s.ItemId, s.StoreId))
+                .Where(s => existKeys.Add((s.ItemId, s.StoreId)))
+                .ToList();
+
+            if (extract.Count == 0)
+                return;
+
             _context.StoreItem.AddRange(extract);
             await _context.SaveChangesAsync();
         }
@@ -52,15 +68,21 @@ namespace JoSale.Repositories
         {
             var storeItems = _context.StoreItem
                 .Where(s => s.StoreId == StoreId)
-                .Include(i => i.Item).AsQueryable();
+                .Include(i => i.Item)
+                .ThenInclude(c => c.Category)
+                .AsQueryable();
 
             var skipnum = (query.PageNumber - 1) * query.PageSize;
 
             return await storeItems.Skip(skipnum).Take(query.PageSize).ToListAsync();
         }
+
+
+        //This is used by the Scrapers functions, Dont Remove it!
         public async Task<List<StoreItem>> GetAllFromStore(int StoreId)
         {
             return await _context.StoreItem
+                .AsNoTracking()
                 .Where(s => s.StoreId == StoreId)
                 .Include(i => i.Item).ToListAsync();
         }

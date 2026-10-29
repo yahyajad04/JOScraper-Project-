@@ -205,12 +205,11 @@ namespace JoSale.Services
 
                             newItem.Vector = category.Vector;
                             newItem.CategoryId = category.Category.Id;
-                            newItem.CategoryId = category.Category.Id;
+                            newItem.Category = category.Category;
 
                             finalScrapedItems.Add(scraped);
+                            finalItems.Add(newItem);
                         }
-
-                        finalItems.Add(newItem);
                     }
 
                     //This is to check if the pagination ended or not, if not it will bring the next page and 
@@ -242,11 +241,16 @@ namespace JoSale.Services
             }
 
             var newItems = await _itemRepository.CreateItems(finalItems);
+            var removeList = new List<ScrapedItem>();
             foreach (var scraped in finalScrapedItems)
             {
-                scraped.Item = newItems.GetValueOrDefault(scraped.Item)
-                               ?? scraped.Item;
+                if (newItems.ContainsValue(scraped.Item))
+                    scraped.Item = newItems.GetValueOrDefault(scraped.Item);
+                else
+                    removeList.Add(scraped);
             }
+
+            finalScrapedItems.RemoveAll(sc => removeList.Contains(sc));
 
             return finalScrapedItems;
         }
