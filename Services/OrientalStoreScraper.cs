@@ -182,7 +182,7 @@ namespace JoSale.Services
             var removeList = new List<ScrapedItem>();
             foreach (var scraped in finalScrapedItems)
             {
-                if (newItems.ContainsValue(scraped.Item))
+                if (newItems.ContainsKey(scraped.Item))
                     scraped.Item = newItems.GetValueOrDefault(scraped.Item);
                 else
                     removeList.Add(scraped);

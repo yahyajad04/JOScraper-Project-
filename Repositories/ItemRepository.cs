@@ -80,7 +80,8 @@ namespace JoSale.Repositories
 
             foreach (var item in newItems)
             {
-                dict[item] = item;
+                if(!dict.ContainsKey(item))
+                    dict[item] = item;
             }
             return dict;
         }
